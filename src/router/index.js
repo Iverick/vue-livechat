@@ -6,9 +6,18 @@ import Chatroom from '../views/Chatroom.vue'
 // auth guard
 const requireAuth = (to, from, next) => {
   let user = projectAuth.currentUser
-  console.log('current user is auth guard: ', user)
   if (!user) {
     next({ name: 'Welcome' })
+  } 
+  else {
+    next()
+  }
+}
+
+const isAuthed = (to, from, next) => {
+  let user = projectAuth.currentUser
+  if (user) {
+    next({ name: 'Chatroom' })
   } 
   else {
     next()
@@ -19,7 +28,8 @@ const routes = [
   {
     path: '/',
     name: 'Welcome',
-    component: Welcome
+    component: Welcome,
+    beforeEnter: isAuthed
   },
   {
     path: '/chatroom',
